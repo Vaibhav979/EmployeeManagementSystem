@@ -10,6 +10,6 @@ RUN apt-get update && apt-get install -y maven
 RUN mvn clean package
 
 # Run stage
-FROM openjdk:22-jre
+FROM openjdk:21-jre
 COPY --from=build /app/target/EmployeeManagementSystem-1.0-SNAPSHOT.jar /app/EmployeeManagementSystem.jar
 ENTRYPOINT ["java", "-jar", "/app/EmployeeManagementSystem.jar"]
