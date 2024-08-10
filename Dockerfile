@@ -6,7 +6,7 @@ COPY src ./src
 RUN mvn clean package
 
 # Run stage
-FROM openjdk:22-jdk-slim
+FROM openjdk:22-jre-slim
 WORKDIR /app
 COPY --from=build /app/target/EmployeeManagementSystem-1.0-SNAPSHOT.jar /app/EmployeeManagementSystem.jar
 ENTRYPOINT ["java", "-jar", "EmployeeManagementSystem.jar"]
