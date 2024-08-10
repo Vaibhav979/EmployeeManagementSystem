@@ -1,21 +1,12 @@
-# Stage 1: Build the application
-FROM openjdk:22-jdk AS build
-
+# Build stage
+FROM maven:3.9.8-openjdk-22 AS build
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package
 
-# Copy the project files to the working directory
-COPY . .
-
-# Run the Maven build using the Maven Wrapper
-RUN ./mvnw clean package
-
-# Stage 2: Run the application
-FROM openjdk:22-jdk
-
+# Run stage
+FROM openjdk:22-jdk-slim
 WORKDIR /app
-
-# Copy the JAR file from the build stage
-COPY --from=build /app/target/EmployeeManagementSystem-1.0-SNAPSHOT.jar /app/EmployeeManagementSystem-1.0-SNAPSHOT.jar
-
-# Run the JAR file
-CMD ["java", "-jar", "/app/EmployeeManagementSystem-1.0-SNAPSHOT.jar"]
+COPY --from=build /app/target/EmployeeManagementSystem-1.0-SNAPSHOT.jar /app/EmployeeManagementSystem.jar
+ENTRYPOINT ["java", "-jar", "EmployeeManagementSystem.jar"]
